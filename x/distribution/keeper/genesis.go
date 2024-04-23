@@ -139,6 +139,10 @@ func (k Keeper) InitGenesis(ctx context.Context, data types.GenesisState) error 
 	if balances.IsZero() {
 		k.authKeeper.SetModuleAccount(ctx, moduleAcc)
 	}
+
+	fmt.Println("module address: ", moduleAcc.GetAddress())
+	fmt.Println("balances: ", balances)
+	fmt.Println("module holdings: ", moduleHoldingsInt)
 	if !balances.Equal(moduleHoldingsInt) {
 		return fmt.Errorf("distribution module balance does not match the module holdings: %s <-> %s", balances, moduleHoldingsInt)
 	}

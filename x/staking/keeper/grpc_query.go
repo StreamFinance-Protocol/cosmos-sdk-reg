@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	"google.golang.org/grpc/codes"
@@ -66,9 +67,12 @@ func (k Querier) Validators(ctx context.Context, req *types.QueryValidatorsReque
 
 // Validator queries validator info for given validator address
 func (k Querier) Validator(ctx context.Context, req *types.QueryValidatorRequest) (*types.QueryValidatorResponse, error) {
+
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+	fmt.Println("IN VALIDATOR")
+	fmt.Println(req.ValidatorAddr)
 
 	if req.ValidatorAddr == "" {
 		return nil, status.Error(codes.InvalidArgument, "validator address cannot be empty")

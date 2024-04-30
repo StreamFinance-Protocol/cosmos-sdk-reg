@@ -39,11 +39,12 @@ var _ types.MsgServer = msgServer{}
 
 // CreateValidator defines a method for creating a new validator
 func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateValidator) (*types.MsgCreateValidatorResponse, error) {
+	fmt.Println("In Create Validator - sdk msg_server.go")
 	valAddr, err := k.validatorAddressCodec.StringToBytes(msg.ValidatorAddress)
 	if err != nil {
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid validator address: %s", err)
 	}
-
+	fmt.Println("Validator address is: ", valAddr)
 	if err := msg.Validate(k.validatorAddressCodec); err != nil {
 		return nil, err
 	}
@@ -109,7 +110,8 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 	if err != nil {
 		return nil, err
 	}
-
+	fmt.Println("Validator operator address: ", validator.OperatorAddress)
+	fmt.Println("validator consensus public key: ", validator.ConsensusPubkey)
 	commission := types.NewCommissionWithTime(
 		msg.Commission.Rate, msg.Commission.MaxRate,
 		msg.Commission.MaxChangeRate, sdkCtx.HeaderInfo().Time,

@@ -1,6 +1,6 @@
 go 1.21.0
 
-module github.com/cosmos/cosmos-sdk
+module github.com/StreamFinance-Protocol/cosmos-sdk-reg
 
 require (
 	cosmossdk.io/api v0.7.4
@@ -23,6 +23,7 @@ require (
 	github.com/cosmos/btcutil v1.0.5
 	github.com/cosmos/cosmos-db v1.0.2
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
+	github.com/cosmos/cosmos-sdk v0.51.0
 	github.com/cosmos/go-bip39 v1.0.0
 	github.com/cosmos/gogogateway v1.2.0
 	github.com/cosmos/gogoproto v1.4.12
@@ -133,7 +134,6 @@ require (
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mtibben/percent v0.2.1 // indirect
-	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/oasisprotocol/curve25519-voi v0.0.0-20230904125328-1f23a7beb09a // indirect
 	github.com/oklog/run v1.1.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.1 // indirect
@@ -173,6 +173,8 @@ require (
 	rsc.io/qr v0.2.0 // indirect
 )
 
+replace github.com/cosmos/cosmos-sdk => github.com/StreamFinance-Protocol/cosmos-sdk-reg v0.46.0-beta2.0.20240501033313-c79a121a8eee
+
 // Here are the short-lived replace from the Cosmos SDK
 // Replace here are pending PRs, or version to be tagged
 // replace (
@@ -203,6 +205,7 @@ replace (
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1
 	// replace broken goleveldb
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
+
 )
 
 retract (

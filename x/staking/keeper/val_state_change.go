@@ -19,6 +19,7 @@ import (
 // BlockValidatorUpdates calculates the ValidatorUpdates for the current block
 // Called in each EndBlock
 func (k Keeper) BlockValidatorUpdates(ctx context.Context) ([]abci.ValidatorUpdate, error) {
+	fmt.Println(" In BlockValidatorUpdates")
 	// Calculate validator set changes.
 	//
 	// NOTE: ApplyAndReturnValidatorSetUpdates has to come before
@@ -31,6 +32,20 @@ func (k Keeper) BlockValidatorUpdates(ctx context.Context) ([]abci.ValidatorUpda
 	validatorUpdates, err := k.ApplyAndReturnValidatorSetUpdates(ctx)
 	if err != nil {
 		return nil, err
+	}
+
+	// loop through validator updates and log out the address and power
+	for _, update := range validatorUpdates {
+		consAddr, err := sdk.ConsAddressFromBech32(update.PubKey.String())
+		if err != nil {
+			return nil, err
+		}
+		validator, err := k.GetValidatorByConsAddr(ctx, consAddr)
+		if err != nil {
+			return nil, err
+		}
+		fmt.Println("validator set udpates")
+		fmt.Println("validator pub key", update.PubKey.String(), "power", validator.ConsensusPower(k.PowerReduction(ctx)))
 	}
 
 	// unbond all mature validators from the unbonding queue
@@ -171,12 +186,14 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) (updates 
 		// apply the appropriate state change if necessary
 		switch {
 		case validator.IsUnbonded():
+			fmt.Println("validator is unbonded")
 			validator, err = k.unbondedToBonded(ctx, validator)
 			if err != nil {
 				return
 			}
 			amtFromNotBondedToBonded = amtFromNotBondedToBonded.Add(validator.GetTokens())
 		case validator.IsUnbonding():
+			fmt.Println("validator is unbonding")
 			validator, err = k.unbondingToBonded(ctx, validator)
 			if err != nil {
 				return

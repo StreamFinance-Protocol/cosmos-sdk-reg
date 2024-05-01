@@ -346,9 +346,12 @@ func (k Keeper) unjailValidator(ctx context.Context, validator types.Validator) 
 
 // perform all the store operations for when a validator status becomes bonded
 func (k Keeper) bondValidator(ctx context.Context, validator types.Validator) (types.Validator, error) {
+	fmt.Println("*******************")
 	fmt.Println("inside bond validator for: ", validator.OperatorAddress, " with pubkey: ", validator.ConsensusPubkey)
 	// delete the validator by power index, as the key will change
 	if err := k.DeleteValidatorByPowerIndex(ctx, validator); err != nil {
+
+		fmt.Println("error deleting validator by power index: ", err)
 		return validator, err
 	}
 
@@ -356,32 +359,41 @@ func (k Keeper) bondValidator(ctx context.Context, validator types.Validator) (t
 
 	// save the now bonded validator record to the two referenced stores
 	if err := k.SetValidator(ctx, validator); err != nil {
+		fmt.Println("error setting validator: ", err)
 		return validator, err
 	}
 
 	if err := k.SetValidatorByPowerIndex(ctx, validator); err != nil {
+		fmt.Println("error setting validator by power index: ", err)
 		return validator, err
 	}
 
 	// delete from queue if present
 	if err := k.DeleteValidatorQueue(ctx, validator); err != nil {
+		fmt.Println("error deleting validator queue: ", err)
 		return validator, err
 	}
 
 	// trigger hook
 	consAddr, err := validator.GetConsAddr()
 	if err != nil {
+		fmt.Println("error getting cons address: ", err)
 		return validator, err
 	}
 
 	str, err := k.validatorAddressCodec.StringToBytes(validator.GetOperator())
 	if err != nil {
+		fmt.Println("error getting operator address: ", err)
 		return validator, err
 	}
 
+	fmt.Println("CALLS HOOK TO BONDING: ", consAddr, " with operator: ", str)
 	if err := k.Hooks().AfterValidatorBonded(ctx, consAddr, str); err != nil {
+		fmt.Println("error calling hook: ", err)
 		return validator, err
 	}
+
+	fmt.Println("*******************")
 
 	return validator, err
 }

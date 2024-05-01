@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/cometbft/cometbft/crypto"
@@ -27,6 +28,7 @@ func (k Keeper) Hooks() Hooks {
 
 // AfterValidatorBonded updates the signing info start height or create a new signing info
 func (h Hooks) AfterValidatorBonded(ctx context.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) error {
+	fmt.Println("Inside AfterValidatorBonded")
 	signingInfo, err := h.k.ValidatorSigningInfo.Get(ctx, consAddr)
 	blockHeight := h.k.HeaderService.HeaderInfo(ctx).Height
 	if err == nil {
@@ -44,6 +46,8 @@ func (h Hooks) AfterValidatorBonded(ctx context.Context, consAddr sdk.ConsAddres
 			0,
 		)
 	}
+	fmt.Println("Signing Info: ", signingInfo.Address)
+	fmt.Println("Signing Info: ", signingInfo.StartHeight)
 
 	return h.k.ValidatorSigningInfo.Set(ctx, consAddr, signingInfo)
 }

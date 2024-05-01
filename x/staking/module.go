@@ -177,5 +177,6 @@ func (am AppModule) BeginBlock(ctx context.Context) error {
 
 // EndBlock returns the end blocker for the staking module.
 func (am AppModule) EndBlock(ctx context.Context) ([]appmodule.ValidatorUpdate, error) {
+	fmt.Println("Inside staking EndBlocker")
 	return am.keeper.EndBlocker(ctx)
 }

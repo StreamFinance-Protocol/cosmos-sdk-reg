@@ -44,6 +44,8 @@ func (k Keeper) HasValidatorSigningInfo(ctx context.Context, consAddr sdk.ConsAd
 
 // SetValidatorSigningInfo sets the validator signing info to a consensus address key
 func (k Keeper) SetValidatorSigningInfo(ctx context.Context, address sdk.ConsAddress, info types.ValidatorSigningInfo) error {
+	fmt.Println("Setting validator signing info for: ", address)
+	fmt.Println("with the following signing info:", "address", info.Address, "start height", info.StartHeight, "index offset", info.IndexOffset, "jailed until", info.JailedUntil, "missed blocks counter", info.MissedBlocksCounter, "tombstoned", info.Tombstoned)
 	store := k.storeService.OpenKVStore(ctx)
 	bz, err := k.cdc.Marshal(&info)
 	if err != nil {

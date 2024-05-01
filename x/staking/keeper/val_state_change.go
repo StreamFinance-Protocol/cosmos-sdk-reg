@@ -136,7 +136,7 @@ func (k Keeper) BlockValidatorUpdates(ctx context.Context) ([]abci.ValidatorUpda
 // at the previous block height or were removed from the validator set entirely
 // are returned to CometBFT.
 func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) (updates []abci.ValidatorUpdate, err error) {
-	fmt.Println("------ Inside ApplyAndReturnValidatorSetUpdates ------")
+	fmt.Println("------ INSIDE APPLY VALIDATOR SET UPDATES ------")
 	params, err := k.GetParams(ctx)
 	if err != nil {
 		return nil, err

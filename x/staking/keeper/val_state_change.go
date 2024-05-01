@@ -37,18 +37,8 @@ func (k Keeper) BlockValidatorUpdates(ctx context.Context) ([]abci.ValidatorUpda
 	// loop through validator updates and log out the address and power
 	for _, update := range validatorUpdates {
 		// conver pubkey to addres
-		fmt.Println("validator set udpates loop: ", update.PubKey, "power", update.Power)
-		consAddr, err := sdk.ConsAddressFromBech32(update.PubKey.String())
-		if err != nil {
-			return nil, err
-		}
-		fmt.Println("consAddr in loop: ", consAddr)
-		validator, err := k.GetValidatorByConsAddr(ctx, consAddr)
-		if err != nil {
-			return nil, err
-		}
-		fmt.Println("validator set udpates")
-		fmt.Println("validator pub key", update.PubKey.String(), "power", validator.ConsensusPower(k.PowerReduction(ctx)))
+		fmt.Println("validator set udpates loop: ", update.PubKey.String(), "power", update.Power)
+
 	}
 
 	// unbond all mature validators from the unbonding queue

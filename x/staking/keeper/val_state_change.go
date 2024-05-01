@@ -19,7 +19,7 @@ import (
 // BlockValidatorUpdates calculates the ValidatorUpdates for the current block
 // Called in each EndBlock
 func (k Keeper) BlockValidatorUpdates(ctx context.Context) ([]abci.ValidatorUpdate, error) {
-	fmt.Println(" In BlockValidatorUpdates")
+	fmt.Println(" ------INSIDE BLOCK VALIDATOR UDPATES ------")
 	// Calculate validator set changes.
 	//
 	// NOTE: ApplyAndReturnValidatorSetUpdates has to come before
@@ -136,7 +136,7 @@ func (k Keeper) BlockValidatorUpdates(ctx context.Context) ([]abci.ValidatorUpda
 // at the previous block height or were removed from the validator set entirely
 // are returned to CometBFT.
 func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) (updates []abci.ValidatorUpdate, err error) {
-	fmt.Println(" In ApplyAndReturnValidatorSetUpdates")
+	fmt.Println("------ Inside ApplyAndReturnValidatorSetUpdates ------")
 	params, err := k.GetParams(ctx)
 	if err != nil {
 		return nil, err
@@ -165,8 +165,8 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) (updates 
 		// everything that is iterated in this loop is becoming or already a
 		// part of the bonded validator set
 		valAddr := sdk.ValAddress(iterator.Value())
-		fmt.Println("trying to add validator: ", valAddr)
 		validator := k.mustGetValidator(ctx, valAddr)
+		fmt.Println("handeling validator: ", validator.OperatorAddress, " which current has, ", validator.Tokens, " tokens")
 
 		if validator.Jailed {
 			panic("should never retrieve a jailed validator from the power store")
@@ -181,14 +181,14 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) (updates 
 		// apply the appropriate state change if necessary
 		switch {
 		case validator.IsUnbonded():
-			fmt.Println("validator is unbonded")
+			fmt.Println("validator is unbonded, changing to bonded")
 			validator, err = k.unbondedToBonded(ctx, validator)
 			if err != nil {
 				return
 			}
 			amtFromNotBondedToBonded = amtFromNotBondedToBonded.Add(validator.GetTokens())
 		case validator.IsUnbonding():
-			fmt.Println("validator is unbonding")
+			fmt.Println("validator is unbonding, changing to bonded")
 			validator, err = k.unbondingToBonded(ctx, validator)
 			if err != nil {
 				return
@@ -245,6 +245,7 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) (updates 
 		}
 
 		updates = append(updates, validator.ABCIValidatorUpdateZero())
+		fmt.Println("added new validator to updates: ", validator.OperatorAddress, " with pubkey: ", validator.ConsensusPubkey, " bonded tokens: ", validator.Tokens, " status: ", validator.Status)
 	}
 
 	// Update the pools based on the recent updates in the validator set:
@@ -277,7 +278,7 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) (updates 
 	if err = k.SetValidatorUpdates(ctx, updates); err != nil {
 		return nil, err
 	}
-
+	fmt.Println("------------END OF APPLY VALIDATOR UDPATES ----------")
 	return updates, err
 }
 
@@ -346,7 +347,7 @@ func (k Keeper) unjailValidator(ctx context.Context, validator types.Validator) 
 
 // perform all the store operations for when a validator status becomes bonded
 func (k Keeper) bondValidator(ctx context.Context, validator types.Validator) (types.Validator, error) {
-	fmt.Println("inside bond validator for: ", validator.OperatorAddress, " with pubkey: ", validator.ConsensusPubkey)
+	fmt.Println("inside bond validator for: ", validator.OperatorAddress, " with pubkey: ", validator.ConsensusPubkey, " bonded tokens: ", validator.Tokens, " status: ", validator.Status)
 	// delete the validator by power index, as the key will change
 	if err := k.DeleteValidatorByPowerIndex(ctx, validator); err != nil {
 		return validator, err

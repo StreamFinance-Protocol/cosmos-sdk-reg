@@ -7,7 +7,6 @@ import (
 	"sort"
 
 	abci "github.com/cometbft/cometbft/abci/types"
-	gogotypes "github.com/cosmos/gogoproto/types"
 
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/math"
@@ -205,12 +204,12 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) (updates 
 		if err != nil {
 			return nil, err
 		}
-		oldPowerBytes, found := last[valAddrStr]
+		_, found := last[valAddrStr]
 		newPower := validator.ConsensusPower(powerReduction)
-		newPowerBytes := k.cdc.MustMarshal(&gogotypes.Int64Value{Value: newPower})
+		// newPowerBytes := k.cdc.MustMarshal(&gogotypes.Int64Value{Value: newPower})
 
 		// update the validator set if power has changed
-		if !found || !bytes.Equal(oldPowerBytes, newPowerBytes) {
+		if !found {
 			updates = append(updates, validator.ABCIValidatorUpdate(powerReduction))
 
 			if err = k.SetLastValidatorPower(ctx, valAddr, newPower); err != nil {

@@ -253,6 +253,7 @@ func (k msgServer) EditValidator(ctx context.Context, msg *types.MsgEditValidato
 
 // Delegate defines a method for performing a delegation of coins from a delegator to a validator
 func (k msgServer) Delegate(ctx context.Context, msg *types.MsgDelegate) (*types.MsgDelegateResponse, error) {
+	fmt.Println("------ IN DELEGATE ------")
 	valAddr, valErr := k.validatorAddressCodec.StringToBytes(msg.ValidatorAddress)
 	if valErr != nil {
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid validator address: %s", valErr)

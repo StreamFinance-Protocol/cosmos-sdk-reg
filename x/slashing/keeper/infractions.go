@@ -48,6 +48,12 @@ func (k Keeper) HandleValidatorSignatureWithParams(ctx context.Context, params t
 
 	consAddr = sdk.ConsAddress(valConsAddr)
 
+	fmt.Println("--------------------")
+	fmt.Println("Slashing HandleValidatorSignatureWithParams")
+	fmt.Println("consAddr: ", consAddr)
+	fmt.Println("valConsAddr: ", valConsAddr)
+	fmt.Println("--------------------")
+
 	// fetch signing info
 	signInfo, err := k.ValidatorSigningInfo.Get(ctx, consAddr)
 	if err != nil {

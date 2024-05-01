@@ -26,6 +26,13 @@ func (k Keeper) HasValidatorSigningInfo(ctx context.Context, consAddr sdk.ConsAd
 // JailUntil attempts to set a validator's JailedUntil attribute in its signing
 // info.
 func (k Keeper) JailUntil(ctx context.Context, consAddr sdk.ConsAddress, jailTime time.Time) error {
+
+	fmt.Println("--------------------")
+	fmt.Println("Inside JailUntil")
+	fmt.Println("Consensus Address: ", consAddr)
+	fmt.Println("Jail Time: ", jailTime)
+	fmt.Println("--------------------")
+
 	signInfo, err := k.ValidatorSigningInfo.Get(ctx, consAddr)
 	if err != nil {
 		addr, err := k.sk.ConsensusAddressCodec().BytesToString(consAddr)
@@ -41,6 +48,12 @@ func (k Keeper) JailUntil(ctx context.Context, consAddr sdk.ConsAddress, jailTim
 
 // Tombstone attempts to tombstone a validator.
 func (k Keeper) Tombstone(ctx context.Context, consAddr sdk.ConsAddress) error {
+
+	fmt.Println("--------------------")
+	fmt.Println("Inside Tombstone")
+	fmt.Println("Consensus Address: ", consAddr)
+	fmt.Println("--------------------")
+
 	signInfo, err := k.ValidatorSigningInfo.Get(ctx, consAddr)
 	if err != nil {
 		addr, err := k.sk.ConsensusAddressCodec().BytesToString(consAddr)

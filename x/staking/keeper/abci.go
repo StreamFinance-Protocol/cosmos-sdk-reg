@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/x/staking/types"
@@ -18,6 +19,11 @@ func (k *Keeper) BeginBlocker(ctx context.Context) error {
 
 // EndBlocker called at every block, update validator set
 func (k *Keeper) EndBlocker(ctx context.Context) ([]appmodule.ValidatorUpdate, error) {
+
+	fmt.Println("--------------------")
+	fmt.Println("Staking end blocker")
+	fmt.Println("--------------------")
+
 	start := telemetry.Now()
 	defer telemetry.ModuleMeasureSince(types.ModuleName, start, telemetry.MetricKeyEndBlocker)
 	return k.BlockValidatorUpdates(ctx)

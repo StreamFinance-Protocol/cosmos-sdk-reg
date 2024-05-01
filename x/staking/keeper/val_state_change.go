@@ -137,6 +137,10 @@ func (k Keeper) BlockValidatorUpdates(ctx context.Context) ([]appmodule.Validato
 // at the previous block height or were removed from the validator set entirely
 // are returned to CometBFT.
 func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) ([]appmodule.ValidatorUpdate, error) {
+
+	fmt.Println("--------------------")
+	fmt.Println("Staking ApplyAndReturnValidatorSetUpdates")
+
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return nil, err
@@ -154,6 +158,8 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) ([]appmod
 		return nil, err
 	}
 
+	fmt.Println("last: ", last)
+
 	// Iterate over validators, highest power to lowest.
 	iterator, err := k.ValidatorsPowerStoreIterator(ctx)
 	if err != nil {
@@ -167,6 +173,10 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) ([]appmod
 		// part of the bonded validator set
 		valAddr := sdk.ValAddress(iterator.Value())
 		validator, err := k.GetValidator(ctx, valAddr)
+
+		fmt.Println("validator: ", validator)
+		fmt.Println("valAddr: ", valAddr)
+
 		if err != nil {
 			return nil, fmt.Errorf("validator record not found for address: %X", valAddr)
 		}
@@ -184,18 +194,26 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) ([]appmod
 		// apply the appropriate state change if necessary
 		switch {
 		case validator.IsUnbonded():
+
+			fmt.Println("validator.IsUnbonded()")
+
 			validator, err = k.unbondedToBonded(ctx, validator)
 			if err != nil {
 				return nil, err
 			}
 			amtFromNotBondedToBonded = amtFromNotBondedToBonded.Add(validator.GetTokens())
 		case validator.IsUnbonding():
+
+			fmt.Println("validator.IsUnbonding()")
+
 			validator, err = k.unbondingToBonded(ctx, validator)
 			if err != nil {
 				return nil, err
 			}
 			amtFromNotBondedToBonded = amtFromNotBondedToBonded.Add(validator.GetTokens())
 		case validator.IsBonded():
+
+			fmt.Println("validator.IsBonded()")
 			// no state change
 		default:
 			return nil, fmt.Errorf("unexpected validator status")
@@ -391,6 +409,12 @@ func (k Keeper) unjailValidator(ctx context.Context, validator types.Validator) 
 
 // perform all the store operations for when a validator status becomes bonded
 func (k Keeper) bondValidator(ctx context.Context, validator types.Validator) (types.Validator, error) {
+
+	fmt.Println("--------------------")
+	fmt.Println("Staking bondValidator")
+	fmt.Println("validator: ", validator)
+	fmt.Println("--------------------")
+
 	// delete the validator by power index, as the key will change
 	if err := k.DeleteValidatorByPowerIndex(ctx, validator); err != nil {
 		return validator, err

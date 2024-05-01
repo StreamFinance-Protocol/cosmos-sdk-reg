@@ -2,6 +2,7 @@ package slashing
 
 import (
 	"context"
+	"fmt"
 
 	"cosmossdk.io/x/slashing/keeper"
 	"cosmossdk.io/x/slashing/types"
@@ -24,6 +25,13 @@ func BeginBlocker(ctx context.Context, k keeper.Keeper) error {
 	}
 	sdkCtx := sdk.UnwrapSDKContext(ctx) // TODO remove by passing the comet service
 	for _, vote := range sdkCtx.CometInfo().LastCommit.Votes {
+
+		fmt.Println("--------------------")
+		fmt.Println("Slashing begin blocker")
+		fmt.Println("vote.Validator.Address: ", vote.Validator.Address)
+		fmt.Println("vote: ", vote)
+		fmt.Println("--------------------")
+
 		err := k.HandleValidatorSignatureWithParams(ctx, params, vote.Validator.Address, vote.Validator.Power, vote.BlockIDFlag)
 		if err != nil {
 			return err

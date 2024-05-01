@@ -36,7 +36,8 @@ func (k Keeper) BlockValidatorUpdates(ctx context.Context) ([]abci.ValidatorUpda
 
 	// loop through validator updates and log out the address and power
 	for _, update := range validatorUpdates {
-		fmt.Println("validator set udpates loop: ", update.PubKey.String(), "power", update.Power)
+		// conver pubkey to addres
+		fmt.Println("validator set udpates loop: ", update.PubKey, "power", update.Power)
 		consAddr, err := sdk.ConsAddressFromBech32(update.PubKey.String())
 		if err != nil {
 			return nil, err

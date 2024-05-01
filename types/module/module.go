@@ -820,7 +820,10 @@ func (m *Manager) EndBlock(ctx sdk.Context) (sdk.EndBlock, error) {
 			continue
 		}
 	}
-
+	fmt.Println("------ IN MODULE.GO END BLOCK ------")
+	for _, val := range validatorUpdates {
+		fmt.Println("validator update: ", val)
+	}
 	return sdk.EndBlock{
 		ValidatorUpdates: validatorUpdates,
 		Events:           ctx.EventManager().ABCIEvents(),

@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/bits-and-blooms/bitset"
@@ -17,6 +18,8 @@ import (
 // ConsAddress. If not found it returns ErrNoSigningInfoFound, but other errors
 // may be returned if there is an error reading from the store.
 func (k Keeper) GetValidatorSigningInfo(ctx context.Context, address sdk.ConsAddress) (types.ValidatorSigningInfo, error) {
+	fmt.Println("GetValidatorSigningInfo")
+	fmt.Println("address", address)
 	store := k.storeService.OpenKVStore(ctx)
 	var info types.ValidatorSigningInfo
 	bz, err := store.Get(types.ValidatorSigningInfoKey(address))
@@ -90,6 +93,8 @@ func (k Keeper) JailUntil(ctx context.Context, consAddr sdk.ConsAddress, jailTim
 // Tombstone attempts to tombstone a validator. It will panic if signing info for
 // the given validator does not exist.
 func (k Keeper) Tombstone(ctx context.Context, consAddr sdk.ConsAddress) error {
+	fmt.Println("Tombstone")
+	fmt.Println("consAddr", consAddr)
 	signInfo, err := k.GetValidatorSigningInfo(ctx, consAddr)
 	if err != nil {
 		return types.ErrNoSigningInfoFound.Wrap("cannot tombstone validator that does not have any signing information")

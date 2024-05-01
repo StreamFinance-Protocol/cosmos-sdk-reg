@@ -38,7 +38,7 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 
 	fmt.Println("------ IN CREATE VALIDATOR ------")
 	fmt.Println("trying to create validator with address: ", msg.ValidatorAddress)
-	fmt.Println("---------------------------------")
+
 	valAddr, err := k.validatorAddressCodec.StringToBytes(msg.ValidatorAddress)
 	if err != nil {
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid validator address: %s", err)

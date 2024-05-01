@@ -83,6 +83,7 @@ func (k Keeper) IterateValidatorSigningInfos(ctx context.Context,
 // JailUntil attempts to set a validator's JailedUntil attribute in its signing
 // info. It will panic if the signing info does not exist for the validator.
 func (k Keeper) JailUntil(ctx context.Context, consAddr sdk.ConsAddress, jailTime time.Time) error {
+	fmt.Println("In JailUntil for: ", consAddr)
 	signInfo, err := k.GetValidatorSigningInfo(ctx, consAddr)
 	if err != nil {
 		return errors.Wrap(err, "cannot jail validator that does not have any signing information")
@@ -112,6 +113,7 @@ func (k Keeper) Tombstone(ctx context.Context, consAddr sdk.ConsAddress) error {
 
 // IsTombstoned returns if a given validator by consensus address is tombstoned.
 func (k Keeper) IsTombstoned(ctx context.Context, consAddr sdk.ConsAddress) bool {
+	fmt.Println("checking if is tombstoned for: ", consAddr)
 	signInfo, err := k.GetValidatorSigningInfo(ctx, consAddr)
 	if err != nil {
 		return false

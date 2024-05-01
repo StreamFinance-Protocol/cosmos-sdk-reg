@@ -16,6 +16,7 @@ import (
 
 // HandleValidatorSignature handles a validator signature, must be called once per validator per block.
 func (k Keeper) HandleValidatorSignature(ctx context.Context, addr cryptotypes.Address, power int64, signed comet.BlockIDFlag) error {
+	fmt.Println("HandleValidatorSignature in slashing for: ", addr.String(), "power", power, "signed", signed)
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	logger := k.Logger(ctx)
 	height := sdkCtx.BlockHeight()

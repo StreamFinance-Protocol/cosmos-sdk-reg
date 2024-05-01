@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -36,6 +37,7 @@ func (k Keeper) Params(ctx context.Context, req *types.QueryParamsRequest) (*typ
 
 // SigningInfo returns signing-info of a specific validator.
 func (k Keeper) SigningInfo(ctx context.Context, req *types.QuerySigningInfoRequest) (*types.QuerySigningInfoResponse, error) {
+	fmt.Println("In slashing grpc_query.go SigningInfo")
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}

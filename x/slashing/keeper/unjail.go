@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	"cosmossdk.io/errors"
 
@@ -12,6 +13,7 @@ import (
 // Unjail calls the staking Unjail function to unjail a validator if the
 // jailed period has concluded
 func (k Keeper) Unjail(ctx context.Context, validatorAddr sdk.ValAddress) error {
+	fmt.Println("Unjail in slashing for validator", validatorAddr)
 	validator, err := k.sk.Validator(ctx, validatorAddr)
 	if err != nil {
 		return err

@@ -143,6 +143,7 @@ func (k Keeper) BlockValidatorUpdates(ctx context.Context) ([]abci.ValidatorUpda
 // at the previous block height or were removed from the validator set entirely
 // are returned to CometBFT.
 func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) (updates []abci.ValidatorUpdate, err error) {
+	fmt.Println(" In ApplyAndReturnValidatorSetUpdates")
 	params, err := k.GetParams(ctx)
 	if err != nil {
 		return nil, err
@@ -171,6 +172,7 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx context.Context) (updates 
 		// everything that is iterated in this loop is becoming or already a
 		// part of the bonded validator set
 		valAddr := sdk.ValAddress(iterator.Value())
+		fmt.Println("trying to add validator: ", valAddr)
 		validator := k.mustGetValidator(ctx, valAddr)
 
 		if validator.Jailed {

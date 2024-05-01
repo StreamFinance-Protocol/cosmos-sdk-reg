@@ -27,7 +27,12 @@ func (k Keeper) Hooks() Hooks {
 
 // AfterValidatorBonded updates the signing info start height or create a new signing info
 func (h Hooks) AfterValidatorBonded(ctx context.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) error {
+
+	fmt.Println("--------------------")
 	fmt.Println("AfterValidatorBonded in slashing")
+	fmt.Println("Consensus Address: ", consAddr)
+	fmt.Println("Val Address: ", valAddr)
+
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	signingInfo, err := h.k.GetValidatorSigningInfo(ctx, consAddr)
 	if err == nil {
@@ -43,6 +48,8 @@ func (h Hooks) AfterValidatorBonded(ctx context.Context, consAddr sdk.ConsAddres
 		)
 		fmt.Println(" setting signingInfo", signingInfo)
 	}
+
+	fmt.Println("--------------------")
 
 	return h.k.SetValidatorSigningInfo(ctx, consAddr, signingInfo)
 }

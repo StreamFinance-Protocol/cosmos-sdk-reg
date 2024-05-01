@@ -16,13 +16,19 @@ import (
 
 // HandleValidatorSignature handles a validator signature, must be called once per validator per block.
 func (k Keeper) HandleValidatorSignature(ctx context.Context, addr cryptotypes.Address, power int64, signed comet.BlockIDFlag) error {
-	fmt.Println("HandleValidatorSignature in slashing for: ", addr.String(), "power", power, "signed", signed)
+
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	logger := k.Logger(ctx)
 	height := sdkCtx.BlockHeight()
 
 	// fetch the validator public key
 	consAddr := sdk.ConsAddress(addr)
+
+	fmt.Println("--------------------")
+	fmt.Println("Slashing HandleValidatorSignatureWithParams")
+	fmt.Println("consAddr: ", consAddr)
+	fmt.Println("valConsAddr: ", addr)
+	fmt.Println("--------------------")
 
 	// don't update missed blocks when validator's jailed
 	isJailed, err := k.sk.IsValidatorJailed(ctx, consAddr)

@@ -120,7 +120,8 @@ func (k Keeper) BlockValidatorUpdates(ctx context.Context) ([]abci.ValidatorUpda
 		)
 	}
 
-	return validatorUpdates, nil
+	//return validatorUpdates, nil
+	return []abci.ValidatorUpdate{}, nil
 }
 
 // ApplyAndReturnValidatorSetUpdates applies and return accumulated updates to the bonded validator set. Also,

@@ -864,6 +864,9 @@ func (k Keeper) Delegate(
 	ctx context.Context, delAddr sdk.AccAddress, bondAmt math.Int, tokenSrc types.BondStatus,
 	validator types.Validator, subtractAccount bool,
 ) (newShares math.LegacyDec, err error) {
+
+	fmt.Println("Delegating")
+
 	// In some situations, the exchange rate becomes invalid, e.g. if
 	// Validator loses all tokens due to slashing. In this case,
 	// make all future delegations invalid.
@@ -973,6 +976,9 @@ func (k Keeper) Delegate(
 func (k Keeper) Unbond(
 	ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress, shares math.LegacyDec,
 ) (amount math.Int, err error) {
+
+	fmt.Println("Unbonding delegation")
+
 	// check if a delegation object exists in the store
 	delegation, err := k.GetDelegation(ctx, delAddr, valAddr)
 	if errors.Is(err, types.ErrNoDelegation) {
@@ -1217,6 +1223,9 @@ func (k Keeper) CompleteUnbonding(ctx context.Context, delAddr sdk.AccAddress, v
 func (k Keeper) BeginRedelegation(
 	ctx context.Context, delAddr sdk.AccAddress, valSrcAddr, valDstAddr sdk.ValAddress, sharesAmount math.LegacyDec,
 ) (completionTime time.Time, err error) {
+
+	fmt.Println("BeginRedelegation")
+
 	if bytes.Equal(valSrcAddr, valDstAddr) {
 		return time.Time{}, types.ErrSelfRedelegation
 	}
@@ -1285,6 +1294,9 @@ func (k Keeper) BeginRedelegation(
 	if err != nil {
 		return time.Time{}, err
 	}
+
+	fmt.Println("Inserting redelegation queue")
+	fmt.Println("Redelegation: ", red)
 
 	err = k.InsertRedelegationQueue(ctx, red, completionTime)
 	if err != nil {

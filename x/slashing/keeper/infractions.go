@@ -24,12 +24,6 @@ func (k Keeper) HandleValidatorSignature(ctx context.Context, addr cryptotypes.A
 	// fetch the validator public key
 	consAddr := sdk.ConsAddress(addr)
 
-	fmt.Println("--------------------")
-	fmt.Println("Slashing HandleValidatorSignatureWithParams")
-	fmt.Println("consAddr: ", consAddr)
-	fmt.Println("valConsAddr: ", addr)
-	fmt.Println("--------------------")
-
 	// don't update missed blocks when validator's jailed
 	isJailed, err := k.sk.IsValidatorJailed(ctx, consAddr)
 	if err != nil {

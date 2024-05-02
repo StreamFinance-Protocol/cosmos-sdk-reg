@@ -13,6 +13,8 @@ import (
 
 // initialize starting info for a new delegation
 func (k Keeper) initializeDelegation(ctx context.Context, val sdk.ValAddress, del sdk.AccAddress) error {
+
+	fmt.Println("initializeDelegation")
 	// period has already been incremented - we want to store the period ended by this delegation action
 	valCurrentRewards, err := k.GetValidatorCurrentRewards(ctx, val)
 	if err != nil {
@@ -41,6 +43,13 @@ func (k Keeper) initializeDelegation(ctx context.Context, val sdk.ValAddress, de
 	// note: necessary to truncate so we don't allow withdrawing more rewards than owed
 	stake := validator.TokensFromSharesTruncated(delegation.GetShares())
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	fmt.Println("val", val)
+	fmt.Println("del", del)
+	fmt.Println("previousPeriod", previousPeriod)
+	fmt.Println("stake", stake)
+	fmt.Println("sdkCtx.BlockHeight()", sdkCtx.BlockHeight())
+
 	return k.SetDelegatorStartingInfo(ctx, val, del, types.NewDelegatorStartingInfo(previousPeriod, stake, uint64(sdkCtx.BlockHeight())))
 }
 

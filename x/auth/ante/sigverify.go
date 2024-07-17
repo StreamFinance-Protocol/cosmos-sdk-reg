@@ -268,6 +268,12 @@ func (svd SigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		return ctx, err
 	}
 
+	fmt.Println("sigverify YYYYYYYYY")
+	fmt.Println(sigTx)
+	fmt.Println(signers)
+	fmt.Println(sigs)
+	fmt.Println("YYYYYYYYY")
+
 	// check that signer length and signature length are the same
 	if len(sigs) != len(signers) {
 		return ctx, errorsmod.Wrapf(sdkerrors.ErrUnauthorized, "invalid number of signer;  expected: %d, got %d", len(signers), len(sigs))

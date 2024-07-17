@@ -690,6 +690,7 @@ func (app *BaseApp) VerifyVoteExtension(req *abci.RequestVerifyVoteExtension) (r
 // only used to handle early cancellation, for anything related to state app.finalizeBlockState.Context()
 // must be used.
 func (app *BaseApp) internalFinalizeBlock(ctx context.Context, req *abci.RequestFinalizeBlock) (*abci.ResponseFinalizeBlock, error) {
+	fmt.Println("COSMOS REG COSMOS REG - internalFinalizeBlock")
 	var events []abci.Event
 
 	if err := app.checkHalt(req.Height, req.Time); err != nil {
@@ -811,6 +812,7 @@ func (app *BaseApp) internalFinalizeBlock(ctx context.Context, req *abci.Request
 
 		txResults = append(txResults, response)
 	}
+	fmt.Println("COSMOS REG COSMOS REG - internalFinalizeBlock - txResults", txResults)
 
 	if app.finalizeBlockState.ms.TracingEnabled() {
 		app.finalizeBlockState.ms = app.finalizeBlockState.ms.SetTracingContext(nil).(storetypes.CacheMultiStore)
@@ -851,6 +853,7 @@ func (app *BaseApp) internalFinalizeBlock(ctx context.Context, req *abci.Request
 // extensions into the proposal, which should not themselves be executed in cases
 // where they adhere to the sdk.Tx interface.
 func (app *BaseApp) FinalizeBlock(req *abci.RequestFinalizeBlock) (res *abci.ResponseFinalizeBlock, err error) {
+	fmt.Println("COSMOS REG COSMOS REG - FinalizeBlock")
 	defer func() {
 		// call the streaming service hooks with the FinalizeBlock messages
 		for _, streamingListener := range app.streamingManager.ABCIListeners {

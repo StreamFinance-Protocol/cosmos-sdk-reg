@@ -2,6 +2,7 @@ package sims
 
 import (
 	"context"
+	"fmt"
 	"math/rand"
 	"testing"
 	"time"
@@ -23,6 +24,7 @@ import (
 
 // GenSignedMockTx generates a signed mock transaction.
 func GenSignedMockTx(r *rand.Rand, txConfig client.TxConfig, msgs []sdk.Msg, feeAmt sdk.Coins, gas uint64, chainID string, accNums, accSeqs []uint64, priv ...cryptotypes.PrivKey) (sdk.Tx, error) {
+	fmt.Println("COSMOS REG COSMOS REG - GenSignedMockTx")
 	sigs := make([]signing.SignatureV2, len(priv))
 
 	// create a random length memo

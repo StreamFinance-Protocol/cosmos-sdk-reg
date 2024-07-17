@@ -251,6 +251,7 @@ func OnlyLegacyAminoSigners(sigData signing.SignatureData) bool {
 }
 
 func (svd SigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+	fmt.Println("COSMOS REG COSMOS REG - SigVerificationDecorator - AnteHandle")
 	sigTx, ok := tx.(authsigning.Tx)
 	if !ok {
 		return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
@@ -267,12 +268,6 @@ func (svd SigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 	if err != nil {
 		return ctx, err
 	}
-
-	fmt.Println("sigverify YYYYYYYYY")
-	fmt.Println(sigTx)
-	fmt.Println(signers)
-	fmt.Println(sigs)
-	fmt.Println("YYYYYYYYY")
 
 	// check that signer length and signature length are the same
 	if len(sigs) != len(signers) {
